@@ -12,10 +12,10 @@
 
 # print(f"\t{my_initials}")
 
-# print("         Courts".lstrio())
+# print("         Courts".lstrip())
 
 # my_link = "https://codecollege.co.za"
-# print(my_link.removeprefix("httops//"))
+# print(my_link.removeprefix("https://"))
 
 # f string w/ 3 var 
 
@@ -37,9 +37,9 @@
 
 # 4 var in same line assign value and print
 
-a, b, c, d = 10, 20, 30, 40
+# a, b, c, d = 10, 20, 30, 40
 
-print(b)
+# print(d)
 
 import this 
 #  The Zen of Python, by Tim Peters
