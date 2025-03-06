@@ -46,16 +46,39 @@ class AlienInvasion:
         # draw the play button if the game is inactive
         self.play_button = Button(self, "Play")
 
+        pygame.mixer.init()  # Initialize sound mixer
+
+        self.clock = pygame.time.Clock()
+        self.settings = Settings()
+
+        # Load sound effects
+        self.bullet_sound = pygame.mixer.Sound("sounds/space-slash-236689.mp3")
+        self.bullet_sound.set_volume(0.5)  # Adjust volume (0.0 - 1.0)
+        # self.ship_sound = pygame.mixer.Sound("space-animal-104986.mp3")
+        self.game_over_sound = pygame.mixer.Sound("sounds/game-over-arcade-6435.mp3")
+        # self.bomb_explosion_sound = pygame.mixer.Sound("large-underwater-explosion-190270.mp3")  # Use your actual file
+        # self.bomb_explosion_sound.set_volume(0.5)  # Adjust volume if needed
+        self.explosion_sound = pygame.mixer.Sound("sounds/explosion-under-snow-sfx-230505.mp3") 
+        self.explosion_sound.set_volume(0.5)  # Adjust volume if needed
+
+
+        # Load and play background music (loop indefinitely)
+        pygame.mixer.music.load("sounds/ambient-soundscapes-007-space-atmosphere-304974.mp3")
+        pygame.mixer.music.set_volume(0.2)  # Adjust volume (0.0 - 1.0)
+        pygame.mixer.music.play(-1)  # Loop forever
+
     def run_game(self):
         """Start the main loop for the game."""
         while True:
             self._check_events()
             if self.stats.game_active:
                 self.ship.update()
+
                 self._update_bullets()
                 self._update_aliens()
-                self._update_screen()
-                self.clock.tick(60)  # Limit FPS to 60
+
+            self._update_screen()
+            self.clock.tick(60)  # Limit FPS to 60
 
     def _check_events(self):
         """Respond to keypresses and mouse events."""
@@ -80,6 +103,9 @@ class AlienInvasion:
             sys.exit()  # Quit the game
         elif event.key == pygame.K_SPACE:
             self._fire_bullet()
+        elif event.key == pygame.K_p:
+            self.stats.game_active = True
+            pygame.mouse.set_visible(False)
 
     def _check_keyup_events(self, event):
         """Respond to key releases."""
@@ -91,6 +117,7 @@ class AlienInvasion:
     def _fire_bullet(self):
         """Create a new bullet and add it to the bullets group."""      
         if len(self.bullets) < self.settings.bullets_allowed:
+            self.bullet_sound.play()
             new_bullet = Bullet(self)
             self.bullets.add(new_bullet)
 
@@ -117,6 +144,7 @@ class AlienInvasion:
             self.sb.prep_level()
 
         if collisions:
+            self.explosion_sound.play()
             for aliens in collisions.values():
                 self.stats.score += self.settings.alien_points * len(aliens)
             self.sb.prep_score()
@@ -126,6 +154,7 @@ class AlienInvasion:
     def _update_screen(self):
         """Update images on the screen, and flip to the new screen."""
         self.screen.fill(self.settings.bg_color)
+        self.ship.blitme()
         self.aliens.draw(self.screen)
         self.sb.show_score()
 
@@ -133,15 +162,15 @@ class AlienInvasion:
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
             
-        self.ship.blitme()
-        pygame.display.flip()
-
         # draw the play button if the game is inactive
         if not self.stats.game_active:
             self.play_button.draw_button()
 
+        pygame.display.flip()
+
     def _create_fleet(self):
         """Create the fleet of aliens."""
+        self.settings.fleet_direction = -1
         alien = Alien(self)
         alien_width, alien_height = alien.rect.size
 
@@ -211,6 +240,7 @@ class AlienInvasion:
         else:
             self.stats.game_active = False
             pygame.mouse.set_visible(True)
+            self.game_over_sound.play
 
     def center_ship(self):
         """Center the ship on the screen."""
@@ -247,7 +277,12 @@ class AlienInvasion:
             self.ship.center_ship()
 
             # Hide the mouse cursor
-            pygame.mouse.set_visible(False)            
+            pygame.mouse.set_visible(False) 
+
+    def draw_button(self):
+        self.screen.fill(self.button_color, self.rect)
+        self.screen.blit(self.msg_image, self.msg_image_rect)          
+        pygame.draw.rect(self.screen, (255, 0, 0), self.play_button.rect, 2)  # Red border
 
 if __name__ == '__main__':
     # Make a game instance, and run the game.
