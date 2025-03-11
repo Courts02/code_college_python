@@ -111,3 +111,147 @@ class RandomWalk:
 
             self.x_values.append(self.x_values[-1] + x_step)
             self.y_values.append(self.y_values[-1] + y_step)
+
+# 15.6
+import random
+import matplotlib.pyplot as plt
+
+def roll_d8():
+    """Simulates rolling an eight-sided die."""
+    return random.randint(1, 8)
+
+# Number of rolls
+num_rolls = 1000  # Increase this number to test system limits
+
+# Simulate rolls
+results = [roll_d8() + roll_d8() for _ in range(num_rolls)]
+
+# Plot histogram
+plt.figure(figsize=(10, 5))
+plt.hist(results, bins=range(2, 18), align='left', edgecolor='black', alpha=0.75)
+
+# Labels and title
+plt.xlabel("Dice Sum")
+plt.ylabel("Frequency")
+plt.title(f"Rolling Two D8s {num_rolls} Times")
+plt.xticks(range(2, 17))
+plt.grid(axis='y', linestyle='--', alpha=0.7)
+
+# Show plot
+plt.show()
+
+# 15.7
+import random
+import matplotlib.pyplot as plt
+
+def roll_d6():
+    """Simulates rolling a six-sided die."""
+    return random.randint(1, 6)
+
+# Number of rolls
+num_rolls = 1000  # Increase this to test system limits
+
+# Simulate rolls
+results = [roll_d6() + roll_d6() + roll_d6() for _ in range(num_rolls)]
+
+# Plot histogram
+plt.figure(figsize=(10, 5))
+plt.hist(results, bins=range(3, 20), align='left', edgecolor='black', alpha=0.75, color='blue')
+
+# Labels and title
+plt.xlabel("Dice Sum")
+plt.ylabel("Frequency")
+plt.title(f"Rolling Three D6s {num_rolls} Times")
+plt.xticks(range(3, 19))
+plt.grid(axis='y', linestyle='--', alpha=0.7)
+
+# Show plot
+plt.show()
+
+# 15.8
+import random
+import matplotlib.pyplot as plt
+
+def roll_d6():
+    """Simulates rolling a six-sided die."""
+    return random.randint(1, 6)
+
+# Number of rolls
+num_rolls = 1000  # You can increase this to test system limits
+
+# Simulate rolls with multiplication
+results = [roll_d6() * roll_d6() for _ in range(num_rolls)]
+
+# Possible products (1 to 36)
+bins = [i for i in range(1, 37)]
+
+# Plot histogram
+plt.figure(figsize=(10, 5))
+plt.hist(results, bins=bins, align='left', edgecolor='black', alpha=0.75, color='green')
+
+# Labels and title
+plt.xlabel("Product of Two Dice Rolls")
+plt.ylabel("Frequency")
+plt.title(f"Multiplication of Two D6s ({num_rolls} Rolls)")
+plt.xticks(range(1, 37))
+plt.grid(axis='y', linestyle='--', alpha=0.7)
+
+# Show plot
+plt.show()
+
+# 15.10
+import random
+import matplotlib.pyplot as plt
+
+def roll_d6():
+    """Simulates rolling a six-sided die."""
+    return random.randint(1, 6)
+
+# Number of rolls
+num_rolls = 1000
+
+# Simulate rolls and store sums
+results = [roll_d6() + roll_d6() for _ in range(num_rolls)]
+
+# Plot histogram
+plt.figure(figsize=(10, 5))
+plt.hist(results, bins=range(2, 14), align='left', edgecolor='black', alpha=0.75, color='blue')
+
+# Labels and title
+plt.xlabel("Dice Sum")
+plt.ylabel("Frequency")
+plt.title(f"Rolling Two D6s {num_rolls} Times")
+plt.xticks(range(2, 13))
+plt.grid(axis='y', linestyle='--', alpha=0.7)
+
+# Show plot
+plt.show()
+
+import plotly.graph_objects as go
+import random
+
+# Number of steps in the walk
+num_steps = 1000
+
+# Generate random walk
+x_values = [0]
+y_values = [0]
+
+for _ in range(num_steps):
+    x_values.append(x_values[-1] + random.choice([-1, 1]))  # Move left or right
+    y_values.append(y_values[-1] + random.choice([-1, 1]))  # Move up or down
+
+# Create Plotly figure
+fig = go.Figure()
+fig.add_trace(go.Scatter(x=x_values, y=y_values, mode="lines", name="Random Walk"))
+
+# Labels and title
+fig.update_layout(
+    title="Random Walk Simulation",
+    xaxis_title="X Position",
+    yaxis_title="Y Position",
+    showlegend=False
+)
+
+# Show interactive plot
+fig.show()
